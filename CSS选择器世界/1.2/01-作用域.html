@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS作用域</title>
+</head>
+
+<body>
+    <section>
+        <style scoped>
+            p {
+                color: blue;
+            }
+
+            :scope {
+                background-color: yellow;
+            }
+        </style>
+        <p>在作用域内，背景是黄色。</p>
+    </section>
+    <p class="outer">作用域外，默认背景色。</p>
+    <div id="hostElement"></div>
+    
+    <script>
+        ; (function (undefined) {
+            let JP = {};
+            JP.El = (seletor) => {
+                return document.querySelector(seletor);
+            }
+
+            let shadow = hostElement.attachShadow({ mode: 'open' });
+            shadow.innerHTML = '<p>由Shadow Dom  创建的&lt;p&gt;元素,背景色是：?</p>';
+            shadow.innerHTML += '<style>p {background-color:#333; color:#fff; }</style>';
+
+        })()
+
+    </script>
+</body>
+
+</html>
