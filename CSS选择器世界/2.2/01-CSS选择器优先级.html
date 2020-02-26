@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS选择器优先级</title>
+</head>
+<body class="foo">
+    颜色！
+    <div class="bar">来吧！来吧！</div>
+    <style>
+
+        body.foo:not(dir) {color: sienna;}
+        html[lang] > .foo{color:steelblue;}
+
+    </style>
+    <style>
+          /* 增加CSS优先级的做法 */
+          /* 不要使用 
+            div.bar{},
+            .foo .bar{}
+          */
+        .bar.bar{color:tomato;}
+        .bar[class]{color:turquoise;}
+    </style>
+</body>
+</html>

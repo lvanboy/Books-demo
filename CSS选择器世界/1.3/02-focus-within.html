@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>focus-within</title>
+</head>
+<body>
+    <p>试试在这个表单中输入点什么。</p>
+    <form>
+        <label for="given_name">Given Name:</label>
+        <input id="given_name" type="text">
+        <br>
+        <label for="family_name">Family Name:</label>
+        <input id="family_name" type="text">
+    </form>
+    <style>
+        form {
+            border: 1px solid;
+            color: gray;
+            padding: 4px;
+        }
+
+        form:focus-within {
+            background: #ff8;
+            color: black;
+        }
+
+        input {
+            margin: 4px;
+        }
+    </style>
+</body>
+</html>

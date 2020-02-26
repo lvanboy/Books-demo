@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS选择器的命名空间</title>
+</head>
+
+<body>
+    <p>文字：<a href>点击刷新</a></p>
+    <p>SVG：<svg><a xlink:href>
+                <path
+                    d="M17.1 5.2l-2.6-2.6-4.6 4.7-4.7-4.7-2.5 2.6 4.7 4.7-4.7 4.7 2.5 2.5 4.7-4.7 4.6 4.7 2.6-2.5-4.7-4.7" />
+            </a></svg></p>
+
+
+
+    <style>
+        @namespace "http://www.w3.org/1999/xhtml";
+        @namespace svg "http://www.w3.org/2000/svg"; 
+        svg|a {color:red;fill:currentColor;}
+        a {
+            color: blue;
+        }
+        /* 存在命名空间的情况下 失效 */
+        svg a {
+            color: gray;
+            fill: currentColor;
+        }
+
+
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hover</title>
+</head>
+<body>
+    <a href="javascript:;" class="cs-button" role="button">按钮</a>
+    <style>
+        /*css reset or css normal 导致的后续样式合并或者覆盖*/
+        a{
+            color:blue;
+        }
+        a:hover{
+            color: red;
+        }
+    </style>
+    <style>
+        .cs-button{
+            background-color:violet;
+            color: white;
+        }
+        .cs-button:hover{
+            background-color: blue;
+        }
+    </style>
+</body>
+</html>

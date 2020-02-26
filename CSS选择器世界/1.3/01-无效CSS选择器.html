@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无效CSS选择器特性</title>
+</head>
+
+<body>
+    <!--当浏览器支持的选择器和浏览器不支持的选择器 用逗号或者其他方式作为一个整体解析时，导致整体失效-->
+    <input class="example" value="文本：123z">
+    <div>1223<span>xxx</span></div>
+    <style>
+        .example {
+            background-color: hotpink;
+            
+        }
+
+        div,span,input::-webkit-whatever{
+            background-color:seagreen;
+        }
+
+        .example:hover,
+        .example:active,
+        .example:focus-within {
+            color: royalblue;
+        }
+        /*
+        将兼容性差的选择器单独写如：
+        .example:hover,
+        .example:active{
+            color:#fff;
+        }
+        .example:focus-within {
+            color: cyan;
+        }
+        */
+    </style>
+
+</body>
+
+</html>
