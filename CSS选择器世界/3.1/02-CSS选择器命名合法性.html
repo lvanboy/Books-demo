@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS选择器命名合法性</title>
+</head>
+
+<body>
+    <div id="123">id：123</div>
+    <div class="455">class ：455<span>span:789 </span></div>
+    <div class="中国">中国</div>
+    <div class="中国people">中国people</div>
+    <div class="。">句号</div>
+    <div class="😀">emoji</div>
+    <div class="+0">+0</div>
+    <div class="--">--</div>
+    <div class="-ab">-ab</div>
+    <style>
+        /* ID和类选择器不能直接以数字开头，否则无效  */
+        /* 但可以使用字符数字 通过转义得到如：\31空格 就是十六进制的字符1 31就是字符1的Unicode*/
+        /*  /0000(字符数字的Unicode)，通过'1'.charCodeAt().toString(16) */
+        /*  建议使用补0，因为空格在css压缩过程中会产生意外 */
+        #\31 23 {
+            background-color: tomato;
+        }
+
+        #123 {
+            background-color: thistle;
+            padding: 5px;
+        }
+
+        .\455 {
+            background-color: teal;
+            padding: 5px;
+        }
+
+        .\00003455 {
+            background-color: violet;
+        }
+
+        .\00003455 span {
+            color: yellow;
+        }
+
+        .中国 {
+            background-color: turquoise;
+            color: red;
+        }
+
+        .中国people {
+            background-color: burlywood;
+        }
+
+        .。 {
+            background-color: cadetblue;
+        }
+
+        .😀 {
+            background-color: cornflowerblue;
+        }
+
+        .\+0 {
+            background-color: darkgoldenrod;
+        }
+
+        /* .-- {
+            background-color:violet;
+        } */
+        .-ab{
+            background-color: darkgreen;
+        }
+    </style>
+    <script>
+        console.log(document.getElementsByClassName('中国')[0]);
+    </script>
+</body>
+
+</html>

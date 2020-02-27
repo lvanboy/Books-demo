@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS选择器设计最佳实践</title>
+</head>
+<body>
+    <div style="background-color:darkcyan;">
+        <button>按钮</button><span style="font-size: 12px;">文字</span>
+    </div>
+    <div id="content" class="cs-content">
+        <a href="javascript:;" id="more" class="cs-content-more">更多</a>
+        对于公共结构、公告模块、UI组件、精致布局 不要使用这种命名，因为他们会散布在项目的各个文件中，维护困难
+        而精致的布局需要的大量的css，这种单命名属性需要很多
+    </div>
+    <style>
+        .cs-content{
+            width: 300px;
+            height: 60px;
+            transition: max-height .5s;
+            line-height: 20px;
+            overflow: hidden;
+        }
+        .cs-content.active{
+            height: auto;
+            max-height: 400px;
+        }
+        .active > .cs-content-more{
+            display: none;
+        }
+
+        /*  1. 不要使用ID选择器
+            原因:  1.1优先级过高，导致重置样式困难 
+                   1.2ID用于JS选择dom，在调整命名时，相互耦合，一般需要修改2处。
+            2. 不要使用嵌套选择器
+                  1.1 在出现了Sass 和 less 预编译后，出现五六层嵌套的选择器，性值比满屏的JavaScript全局变量还恶虐
+                  1.2 渲染性能差（300ms和30ms的区别不是很大，远不如图片资源的优化）这不是不使用重点
+                        1.2.1 CSS渲染性能从高到低排名：
+                            ID选择器
+                            类选择器
+                            标签选择器
+                            通配符选贼强
+                            属性选择器
+                            部分伪类
+                  1.3 优先级混乱（在重置样式时需要付出代价）
+                    1.3.1 使用同样优先级的选择器在重置css代码的后面
+                    1.3.2 在原有层数上 在嵌套一层
+                    1.3.3 使用神级优先级的ID选择器
+                    1.3.4 使用无敌优先级的!important;
+                  1.4 样式布局脆弱
+                    1.4.1 html结构死板，在产品迭代中，不能随意变动html结构 否则样式就挂了
+                    1.4.2 标签名称不能变更 否则需要找到与之对应的css 维护成本大
+
+            3。 使用无嵌套的类名选择器
+                <nav class="cs-nav">
+                    <a class="cs-nav-a">链接1</a>
+                    <a class="cs-nav-a">链接2</a>
+                </nav>
+
+                //worst
+                nav a{}
+
+                //good 
+                .cs-nav 
+                .cs-nav-a
+
+            4. 配合面向属性的命名
+                4.1 对于公共结构、公告模块、UI组件、精致布局 不要使用这种命名，因为他们会散布在项目的各个文件中，维护困难
+                而精致的布局需要的大量的css，这种单命名属性需要很多
+                4.2 细枝末节和特殊场景使用这种命名，类名的意义在于复用，如果它只是一次性的产物，不如直接内联style，父元素
+                的变更也不会影响它
+                4.3 应用场景：两个按钮的间距、某段文字的字号、文字超出宽度...显示等其他特殊场景的微调
+            5. 正确的使用状态类名（激活、禁用、选中）
+                在发生交互操作的类上：尽量使用表示状态的命名如active，进行状态变更的css，不要有额外其他的样式
+
+         */
+
+    </style>
+    <script>
+        more.onclick = function(){
+            content.className += " active";
+        }
+    </script>
+</body>
+</html>

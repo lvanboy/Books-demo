@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS选择器大小写区分</title>
+</head>
+
+<body>
+    <p class="content"> 颜色?</p>
+    <DIV>盒子</DIV>
+    <style>
+        /*html标签和属性不区分大小写 所以css的标签选择器和属性选择器不区分大小写，但属性值区分大小写*/
+        /* 属性值在使用[xx i]的情况下，也会无视大小写的区别 #33行所示*/
+        p {
+            padding: 10px;
+            background-color: black;
+        }
+
+        P {
+            background-color: teal;
+        }
+
+        [CLASS] {
+            color: white;
+        }
+
+        [class='CONTENT'] {
+            text-decoration: underline;
+        }
+
+        [class='CONTENT' i] {
+            border: 2px solid cyan;
+        }
+
+        .CONTENT {
+            text-decoration: line-through;
+        }
+
+    </style>
+</body>
+
+</html>
