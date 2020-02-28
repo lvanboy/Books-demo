@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后代选择器空格</title>
+</head>
+<body>
+    <div class="lightblue">
+        <div class="darkblue">
+            <p>1. 颜色是：</p>
+        </div>
+    </div>
+    <div class="darkblue">
+        <div class="lightblue">
+            <p>2. 颜色是：</p>
+        </div>
+    </div>
+    <div class="lightgreen">
+        <div class="darkgreen">
+            <p>1. 颜色是：</p>
+        </div>
+    </div>
+    <div class="darkgreen">
+        <div class="lightgreen">
+            <p>2. 颜色是：</p>
+        </div>
+    </div>
+    <div id="myid">
+        <div class="lonely">单身如我</div>
+        <div class="outer">
+            <div class="inner">内外开花</div>
+        </div>
+    </div>
+    <style>
+        /*继承样式 就近原则*/
+        .lightblue{color:lightblue;}
+        .darkblue{color:darkblue;}
+        /*根据优先级渲染 */
+        .lightgreen p{color:lightgreen;}
+        .darkgreen p{color:darkgreen;}
+    </style>
+    <script>
+        //对JavaScript中后代选择器的错误认识
+
+        let doc = document,{log} = console;
+        log(doc.querySelectorAll('#myid div div').length);
+        log(doc.querySelector('#myid').querySelectorAll('div div').length);
+        log(doc.querySelector('#myid').querySelectorAll(":scope div div").length);
+    </script>
+</body>
+</html>

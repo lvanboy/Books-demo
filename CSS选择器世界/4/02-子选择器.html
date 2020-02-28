@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子选择器</title>
+</head>
+
+<body>
+    <ol>
+        <li>颜色是？</li>
+        <li>颜色是？</li>
+        <ul>
+            <li>颜色是？</li>
+            <li>颜色是？</li>
+
+        </ul>
+    </ol>
+    <style>
+        /*子选择器主要目的是为了避免冲突，在保证结构没有冲突的情况下，使用后代选择器，具有更好的扩展性*/
+        /* 状态类型控制 、标签受限制（li标签多重嵌套，又无法修改标签名和设置类名）、使用子选择器 ，*/
+        ol li {
+            color: darkblue;
+            text-decoration: underline;
+        }
+        ol>li{
+            color: lightblue;
+            text-decoration: underline wavy;
+        }
+    </style>
+</body>
+
+</html>
