@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相邻兄弟选择符</title>
+</head>
+<body>
+    <!--相邻兄弟选择符忽略纯文本节点，相邻兄弟选择符忽略注释节点，若为正常标签，正常解析！-->
+    <pre>
+        h3 + p {
+             color : crimson;
+        }
+    </pre>
+    <h3>h3:相邻兄弟选择符忽略纯文本节点</h3>
+    这里是一行纯文本节点
+    <p>p:大声说出我爱你！</p>
+    <hr>
+    <pre>
+        h4 + .h4-after-div{ 
+            color : darksalmon;
+        }
+    </pre>
+    <h4>h4：相邻兄弟选择符忽略注释节点</h4>
+    <!--注释节点-->
+    <div class="h4-after-div">div：class = "h4-after-div" 哈撒kill</div>
+    <hr>
+    <pre>
+        h5 + .h5-after-div{
+            color:deeppink;
+        }
+    </pre>
+    <h5>h5：正常标签不会忽略</h5>
+    <aside>aside：我用双手成就你的梦想</aside>
+    <div class="h5-after-div">div: class ="h5-after-div" 面对疾风吧！</div>
+    <style>
+        h3 + p{
+            color: crimson;
+        }
+        h4 + .h4-after-div{
+            color:darksalmon;
+        }
+        h5 + .h5-after-div{
+            color:deeppink;
+        }
+    </style>
+</body>
+</html>

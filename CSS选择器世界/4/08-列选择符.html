@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列选择符||</title>
+</head>
+<body>
+    <table border="1" width="600">
+        <colgroup>
+            <col>
+            <col span="2" class="ancestor">
+            <col span="2" class="brother">
+        </colgroup>
+        <tr>
+            <td></td>
+            <th :scope="col">后代选择符</th>
+            <th :scope="col">子选择符</th>
+            <th :scope="col">相邻兄弟选择符</th>
+            <th :scope="col">随后兄弟选择符</th>
+        </tr>
+        <tr>
+            <th :scope="row">示例</th>
+            <td>.foo .bar {}</td>
+            <td>.foo > .bar{}</td>
+            <td>.foo + .bar{}</td>
+            <td>.foo ~ .bar {}</td>
+        </tr>
+    </table>
+    <p> 通过col的类给表格的列添加样式，但是col会忽略跨列元素</p>
+    <table border="1" width="200">
+        <colgroup>
+            <col span="2">
+            <col class="selected">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
+            </tr>
+            <tr>
+                <td colspan="2">D</td>
+                <td>E</td>
+            </tr>
+            <tr>
+                <td>F</td>
+                <td colspan="2">G</td>
+            </tr>
+        </tbody>
+    </table>
+    <style>
+        .ancestor{
+            background-color: dodgerblue;
+        }
+        .brother{
+            background-color: skyblue;
+        }
+        col.selected{
+            background-color: skyblue;
+        }
+        /*属于.selected 的 td元素，现在存在兼容性问题*/
+        col.selected || td{
+            background-color:cyan;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相邻兄弟选择符02</title>
+</head>
+<body>
+    <p>伪类 配合 相邻兄弟选择符 实现交互效果</p>
+    用户名：<input> <span class="cs-tips">不超过10个字符</span>
+    <style>
+        .cs-tips{
+            color: gray;
+            margin-left: 15px;
+            position: absolute;
+            visibility: hidden;
+           
+        }
+        :focus + .cs-tips{
+            visibility: visible;
+        }
+    </style>
+</body>
+</html>

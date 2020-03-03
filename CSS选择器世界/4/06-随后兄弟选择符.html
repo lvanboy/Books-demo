@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随后兄弟选择符~</title>
+</head>
+<body>
+    <p>随后兄弟选择符与相邻兄弟选择符的差异在于，前者匹配后面的多个，后者匹配后面的一个</p>
+    <p class="cs-li">列表内容1</p>
+    <h4 class="cs-h">标题</h4>
+    <p class="cs-li">列表内容2</p>
+    <p>列表内容3</p>
+    <p class="cs-li">列表内容4</p>
+    <p class="cs-li">列表内容5</p>
+    <style>
+        .cs-h ~ .cs-li{
+            color:skyblue;
+            text-decoration: underline;
+        }
+        .cs-h + .cs-li{
+            text-decoration: underline wavy;
+        }
+
+    </style>
+</body>
+</html>

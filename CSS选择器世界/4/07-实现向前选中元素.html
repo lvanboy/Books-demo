@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>input聚焦，input前面的label实现样式变化</title>
+</head>
+<body>
+    <p>实现向前选择，实际还是向后选择，但在dom结构上进行交换，在强制使用样式进行正常排列</p>
+    <div class="cs-flex">
+        <input type="text" class="cs-input"><label class="cs-label">用户名：</label>
+    </div>
+    <div class="cs-float">
+        <input type="text" class="cs-input"><label class="cs-label">用户名:</label>
+    </div>
+    <div class="cs-absolute">
+        <input type="text" class="cs-input-abs"><label class="cs-label-abs">用户名:</label>
+    </div>
+    <div class="cs-direction">
+        <input type="text" class="cs-input-drc"><label class="cs-label-drc">用户名:</label>
+    </div>
+    <style>
+        .cs-flex{
+            display: inline-flex;
+            flex-direction: row-reverse;
+        }
+        .cs-input{
+            width: 200px;
+        }
+        .cs-label{
+            width: 64px;
+        }
+        :focus ~ .cs-label{
+            color:darkblue;
+            text-shadow: 0 0 1px;
+        }
+    </style>
+    <style>
+        .cs-float{
+            margin-top: 20px;
+            width: 264px;
+        }
+        .cs-input{
+            width: 200px;
+            float: right;
+        }
+        .cs-label{
+            width: auto;
+            display: block;
+            overflow: hidden;
+        }
+        :focus ~ .cs-label{
+            color: darkblue;
+            text-shadow: 0 0 1px;
+        }
+        .cs-absolute{
+            width: 264px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .cs-input-abs{
+            width: 200px;
+            margin-left: 64px;
+        }
+        .cs-label-abs{
+            width: auto;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        :focus ~ .cs-label-abs{
+            color: darkblue;
+            text-shadow: 0 0 1px;
+        }
+        .cs-direction{
+            margin-top: 20px;
+            width: 264px;
+            direction: rtl;
+            text-align: left;
+        }
+        .cs-label-drc,.cs-input-drc{
+            direction: ltr;
+        }
+        .cs-input-drc{
+            width: 200px;
+        }
+        .cs-label-drc{
+            width: auto;
+            display: inline-block;
+            
+        }
+        :focus ~ .cs-label-drc{
+            color: darkblue;
+            text-shadow: 0 0 1px;
+        }
+    </style>
+</body>
+</html>
