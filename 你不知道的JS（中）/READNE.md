@@ -78,14 +78,14 @@ DOM查询操作返回DOM元素列表，这就是类数组。
 
 1. 字符串和字符数组不是一回事，即使他们都具有length，indexOf，concat方法等等。
 
-2. 字符串不可以通过下标单独修改某个字符，也就是字符串是不变的。
+2. 字符串不可以通过下标单独修改某个字符，称为字符串的不可变性，字符串的 成员函数不会改变其原始值。
 
 ```js
 let a = ['your'];
 a[0] = 'Y';  // 'your'
 ```
 
-3. 字符串借用数组非变更方法，实现一些自身不具备方法
+3. 字符串借用数组非变更方法（不会修改自身值，而是产生新的返回值），实现一些自身不具备方法
 
 ```js
 let b = 'ours'
@@ -99,7 +99,7 @@ c  // "o-u-r-s"
 d  // "O.U.R.S"
 ```
 
-4. 数组的可变更方法reverse，字符串不可以借用
+4. 数组的可变更方法（修改自身值，且返回新的值）reverse，字符串不可以借用
 
 ```js
 let a = 'im'
@@ -136,6 +136,48 @@ Array.prototype.reverse.call(a) //报错
 3. 使用指数形式来表达较大的数字，`var onethousand = 1E3;`
 
 4. 以不同前缀开头，代表不同进制，如：0xf1十六进制，0o243八进制，0b1101，0B1101二进制。
+
+5. 遵循IEEE754规范的语言，在浮点数运算时，会产生精度丢失的问题；那么如何判断浮点运算? **通过设置误差值判定**。
+   ```js
+      if(!Number.EPSILON){
+         Number.EPSILON = Math.pow(2,-52);
+      }
+      function floatNumberEqual(a,b){
+         return Math.abs(n1 - n2) < Number.EPSILON;
+      }
+
+   ```
+   最大的浮点数存放在Number.MAX_VALUE,最大的整数存放在Number.MIN_VALUE.
+   最大的整数存放在Number.MAX_SAFE_INTEGER,最小的整数存放在Number.MIN_SAFE_INTEGER.
+
+
+6. 整数检测
+   - Number.isInteger
+   - 
+   ```js
+      if(Number.isInteger){
+         Number.isInteger = function(num){
+            typeof num === 'number' && num % 1 == 0;
+         }
+      }
+   ```
+
+7. 检测一个整数的安全性
+```JS
+function safe(num){
+   if(!Number.isSafeInteger){
+         return Number.isInteger() && Math.abs(num) <= Number.MAX_SAFE_INTEGER  
+   }else{
+      return Number.isSafeInteger(num);
+   }
+}
+safe(Math.pow(2,53))
+safe(Math.pow(2,53)-1)
+
+```
+
+
+
 
 
 
