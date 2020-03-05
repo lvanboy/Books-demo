@@ -143,7 +143,7 @@ Array.prototype.reverse.call(a) //报错
          Number.EPSILON = Math.pow(2,-52);
       }
       function floatNumberEqual(a,b){
-         return Math.abs(n1 - n2) < Number.EPSILON;
+         return Math.abs(n1n2) < Number.EPSILON;
       }
 
    ```
