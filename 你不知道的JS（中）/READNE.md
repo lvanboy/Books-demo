@@ -177,6 +177,62 @@ safe(Math.pow(2,53)-1)
 ```
 
 
+## 特殊的值
+1. undefined的类型只有undefined一个值，null类型只有null一个值，不要把这两个类型的值当做变量声明。
+
+2. **void** 运算符 没有返回值，因为返回结果为**undefined**,`void a === undefined // true`
+
+3. 如果数学运算的操作数不是数字，这种情况返回 **NaN**，这仍然是一个数字类型,且不与自身相等,如
+   ```js
+   let f = 2 / '1s';    //NaN
+   typeof f === "number"; //true
+   f !== NaN  // true
+   ```
+   存在这样的一个方法，它可以判断NaN或者不是数字,如：
+   ```js
+   let f = 2 / 'my';
+   window.isNaN(f)  //true;
+   window.isNaN('your') //true
+   window.isNaN(12) //false
+   ```
+   为了能够更准确的判断数字，存在这样的polyfill的方法：
+   ```js
+      if(!Number.prototype.isNaN){
+         Number.prototype.isNaN = function(){
+            return window.isNaN(this) 
+         }
+      }
+      let a = 2 / 'ours',a1 = 1;
+      let str = 'this';
+      a.isNaN() //true;
+      a1.isNaN() //false;
+      str.isNaN()  //报错
+   ```
+   使用参数传递的方法，避免意外的错误
+   ```js
+      if(!Number.isNaN){
+         Number.isNaN = n =>  typeof(n) === 'number' && window.isNaN(n) 
+      }
+      let a = 2 / 'ours',a1 = 1;
+      let str = 'this';
+      Number.isNaN(a) //true;
+      Number.isNaN(a1) //false;
+      Number.isNaN(str)  //false;
+
+   ```
+   或者呢，如果自身不等于自身，判定为NaN
+   ```js
+      if(!Number.isNaN){
+         Number.isNaN = n => n !== n;
+      }
+      Number.isNaN(NaN); //true
+      Number.isNaN('this'); //false
+      Number.isNaN(12); //false
+   ```
+
+
+
+
 
 
 
