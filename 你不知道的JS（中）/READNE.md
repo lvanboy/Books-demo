@@ -230,10 +230,194 @@ safe(Math.pow(2,53)-1)
       Number.isNaN(12); //false
    ```
 
+4. 无穷数，JavaScript允许被除数为0，这样就会出现无穷数
+```js
+let a = 1 / 0 ; //Infinity
+let b = -1 / 0; //-Infinity
 
+```
+   另外如果运算结果超过JavaScript有限数字的最值范围，也会出现无穷数; **无穷/无穷 = NaN，有穷/无穷 = 0**
 
+```js
+let a = Number.MAX_VALUE;  //1.78e+308
+let b = a + Math.pow(2,970); //Infinity
+let c = a + Math.pow(2,969); 
+let d = a+a  // Infinity
+let res1 = b / d; //NaN
+let res2 = a / b; // 0
+```
 
+5. 零值,0 / 正负数 = 正负0,-0转字符串=字符串0，字符串-0转数字=0，0和-0作比较是相等的
+```js
+   let a = 0 / -1;  //-0
+   let b = 0 / 1;   // 0
+   //数字-0转字符串
+   let str1 = a.toString(); // 0
+   let str2 = JSON.stringify(a)//0
+   let str3 = String(a); //0
+   let str4 = a + '';
+   //字符串-0转数字
+   let n1 = parseInt('-0'); // -0
+   let n2 = JSON.parse('-0'); // -0
+   let n3 = Number('-0'); // -0
+   //0和-0比较
+   let com1 = a == b; //true
+   let com2 = a === b //true
+   let com3 = 0 == -0; //true
+   let com4 = 0 === -0; //true
+   let com5 = 0 > -0; //false
+   let com6 = a > b; //false
+```
+   那么如何区分零和负零？
+```js
+function isNegZero(n){
+   return (+n === 0)&&(1 / +n === -Infinity )
+}
+isNegZero(0)
+isNegZero(-0)
+```
+6. 特殊等式，ES6中的Object.is用来判断两个值是否绝对相等，包括NaN和正负0
+```js
+let a = 1 / '1s'; // NaN
+let b = 0 / -1 ; // -0
+let bol1 = Object.is(a,NaN); // true
+let bol2 = Object.is(0,b); // false
+let bol3 = Object.is(-0,b); // true
+```
 
+## 值和引用
+1.JavaScript对值和引用的赋值/传递在语法上没有区别，完全根据值的类型来确定
+简单值（基本类型）：null、undefined、布尔、数字、字符串
+引用（复杂类型）：object(数组、封装对象)和函数
+```js
+let a = 1;
+let b = a;
+b++;
+a //1
+b //2
+let arr1 = [1,2,3]
+let arr2 = arr1;
+arr2.push(4);
+arr1 //[1,2,3,4]
+arr2 //[1,2,3,4] 
+arr2 = ['a','b']
+arr1 // [1,2,3,4]
+arr2 // ['a','b']
+```
 
+其中，arr2指向值本身而不是变量时，相当于断开了与arr1的连接；在函数参数上建立连接，外层值应等于连接参数的值，当断开连接，函数参数无论怎么修改，也不会影响外层值
+```js
+function foo(x){
+   x.push(4);
+   x //[1,2,3,4]
+   x = ['a','b']
+   x.push('c');
+   x //['a','b','c']
+}
+let a = [1,2,3]
+foo(a)
+a // [1,2,3,4]
 
+```
+
+那么，如何清空引用值，同时保持连接，通过将数组的length属性置为0；保持引用，且重新初始化。
+```js
+function foo(x){
+   x.push(4)
+   x //[1,2,3,4]
+   x.length = 0;
+   x.push('a','b','c');
+}
+let a = [1,2,3]
+foo(a)
+a // ['a','b','c'];
+```
+如果使用一个数组的浅拷贝,这个值的变化与a无关
+```js
+function foo(x){
+   x.push(4)
+   x //[1,2,3,4]
+   x.length = 0;
+   x.push('a','b','c');
+}
+let a = [1,2,3]
+let b = a.slice()
+foo(b)
+a  //[1,2,3]
+b // ['a','b','c'];
+```
+使用包装对象，也无法使基本值变成引用对象
+```js
+function foo(x){
+   x = x + 1;
+   x = x + '1';
+   x // 31
+}
+let a = 2;
+let b = new Number(a);
+typeof b 
+let c = new Object(a);
+typeof c
+foo(b) //2
+foo(c) //2
+```
+
+## 原生函数（内建函数）
+常见内置函数包括：
+- String()
+- Number()
+- Boolean()
+- Array()
+- Object()
+- Function()
+- RegExp
+- Date()
+- Error()
+- Symbol()
+
+1.内部属性[[Class]],凡是使用typeof variable === 'object'，都存在内部属性[[class]],这个属性无法直接访问，通过**Object.prototype.toString.call**间接访问,
+在使用这个方法时，基本类型也会自动使用封装对象进行包装。
+```js
+let a = new String('hello');
+typeof a 
+a instanceof String
+Object.prototype.toString.call(a) === '[object String]' //true
+Object.prototype.toString.call([1,2,3]) === '[object Array]' //true
+Object.prototype.toString.call(/[0-9]/ig) === '[object RegExp]' //true
+Object.prototype.toString.call(null) === '[object Null]' // true
+Object.prototype.toString.call(undefined) === '[object Undefined]' //true
+```
+
+2. 基本数据类型没有封装对象的属性和方法，但在基本类型用到封装对象的属性和方法时，则进行自动包装，JavaScript引擎对此进行了优化；所以尽可能使用字面量的形式，这样性能更好。
+其中直接使用布尔类型的封装对象，返回的一定是真值；基本数据类型在不使用**new**构造函数生成的对象，typeof这个对象的类型是基本数据类型，但同样拥有封装对象的属性和方法。
+```js
+let str = 'your name';
+let bol = new Boolean(false);
+let str1 = String(str);
+let str2 = new String(str);
+let str3 = Object(str);
+typeof str1
+typeof str2
+typeof str3
+if(!bol){
+   bol = true;
+}
+str.length //包装成对象，使用封装对象的属性
+str.toUpperCase() //包装成对象，使用封装对象属性
+```
+
+3. 使用valueOf获取基本封装对象中的值
+```js
+let a = new Number(10);
+let b = new String('color');
+let c = new Boolean(true);
+let a1 = a.valueOf();
+let b1 = b.valueOf();
+let c1 = c.valueOf();
+```
+
+4. 数组、对象、函数和正则表达式使用常量或者构造函数，产生都是封装对象。
+```js
+   
+```
 
