@@ -1,0 +1,14 @@
+.js-editor{
+    display: flex;
+}
+.code-editor{
+    flex:0 1 50%;
+    height: 250px;
+}
+
+.runtime-result{
+    flex:auto;
+    background-color: rgb(30, 30, 30);
+    color: sandybrown;
+    white-space: pre-line;
+}
