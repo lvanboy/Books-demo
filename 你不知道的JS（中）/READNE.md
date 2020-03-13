@@ -375,7 +375,7 @@ foo(c) //2
 - Error()
 - Symbol()
 
-1.内部属性[[Class]],凡是使用typeof variable === 'object'，都存在内部属性[[class]],这个属性无法直接访问，通过**Object.prototype.toString.call**间接访问,
+1. 内部属性[[Class]],凡是使用typeof variable === 'object'，都存在内部属性[[class]],这个属性无法直接访问，通过**Object.prototype.toString.call**间接访问,
 在使用这个方法时，基本类型也会自动使用封装对象进行包装。
 ```js
 let a = new String('hello');
@@ -416,8 +416,104 @@ let b1 = b.valueOf();
 let c1 = c.valueOf();
 ```
 
-4. 数组、对象、函数和正则表达式使用常量或者构造函数，产生都是封装对象。
+4. 数组、对象、函数和正则表达式使用常量或者构造函数，都是产生封装对象;Array构造函数只有一个参数时，参数作为数组的预设长度;
+new Array 构造函数和 Array 构造函数是等价的,永远不要创建和使用空数组。
 ```js
-   
+   let arr = new Array(1,2,3) //[1,2,3]
+   let arr1 = new Array(5) // [ <5 empty items> ]
+   let arr2 = Array(1,2,3)  //[1,2,3]
+   let arr3 = [1,2,3]     //[1,2,3]
 ```
 
+```js
+let a = new Array(3); // [ <3 empty items> ]
+let b = [undefined,undefined,undefined]; //[ undefined, undefined, undefined ]
+let c = []; 
+c.length = 3; //[ <3 empty items> ]
+a.join('-'); //'--'
+b.join('-'); //'--'
+a.map((v,i)=>{return i});  //[ <3 empty items> ] ,这里的map相等于没有执行
+b.map((v,i)=>{return i});  //[0,1,2]
+let d = Array.apply(null,{length:3}) //[undefined,undefined,undefined]
+
+```
+
+5. 不要万不得已，千万不要使用Object()、Function()、RegExp()构造函数的形式创建对象，直接使用常量（字面量）创建,构造函数的方式一般用于动态参数。
+
+
+6. Error()和Date()没有常量形式，只能使用构造函数生成对象。
+Error()和Array()一样，new 关键字可以省略；Error错误对象可以获取当前运行栈的上下文，一般和throw一起使用,错误对象中存在message属性，一般抛出异常后续代码将不再执行,Error对象下面也有许多子错误类型ReferenceError、SyntaxError。
+```js
+let x = '';
+new Date().getTime() === Date.now()
+try{
+   if(!x){
+   throw new Error("x wasn't provided");
+   }
+}catch(err){
+   console.log(err)
+}
+
+```
+
+7. Symbol(符号)是一个具有唯一性的特殊值，用它命名对象属性避免重复，无法查看和访问它的值；ES6中预定义符号，以Symbol静态属性的形式呈现：Symbol.create、Symbol.iterator等；
+构造函数不能使用new关键字，构造函数可以自定义符号对象,主要用于私有或者特殊属性，可使用getOwnPropertySymbols读到。
+```js
+let s = Symbol("my own symbol");
+s.toString()
+typeof s; //symbol
+let obj = {};
+obj[s] = 'welcome to home';
+Object.getOwnPropertySymbols(obj); //[ Symbol(my own symbol) ]
+
+```
+
+8. 原生函数的原型，如Array.prototype,String.prototype等，这些对象包含子类型的所有行为特征；Function.prototype是一个空函数，Array.prototype是一个空数组，RegExp.prototype是一个空的正则表达式;
+那么就可以把这个当做一种默认值使用,ES6中提供了函数参数的默认值功能，不要再使用||运算符。Array.prototype是一个只读变量，修改它，会产生一系列的问题，应该避免。
+```js
+typeof Function.prototype; //function
+Function.prototype(); //空函数
+RegExp.prototype.toString(); // /?:/
+Array.isArray(Array.prototype); // true
+Array.prototype.push(1,2,3);
+Array.prototype  //[1,2,3]
+Array.prototype.length = 0; //[]
+```
+
+```js
+function isThisCool(vals,fn,rx){
+   vals =vals || Array.prototype;
+   fn = fn || Function.prototype;
+   rx = rx || /?:/
+   return rx.test(vals.map(fn).join(''))
+}
+isThisCool(); //true;
+isThisCool(["a","b","c"],function(v){
+   return v.toUpperCase();
+},/\D/); // true;
+
+```
+
+
+
+## 强制类型转化(值转化)
+1. ToString，对于普通对象来说，除非重写toString(),否则toString()(Object.prototype.toString())返回内部属性[[Class]]的值，如果对象有自己的toString()方法，字符串化时则调用该方法并返回其值。
+数组的默认toString已经重新定义过：讲所有元素使用逗号连接。toString()可以显示调用，也可以在字符串拼接时自动调用。
+```js
+let a = [1,2,3]
+a.toString();
+let b = a+'.';
+```
+2.安全的JSON值都可以使用JSON.stringify字符串化，不安全的JSON值(：undefined、function、symbol、对象的循环引用)自动忽略，在数组中则返回null
+```js
+let sym = Symbol('y')
+JSON.stringify(42);
+JSON.stringify("42");
+JSON.stringify(null)
+JSON.stringify(true)
+JSON.stringify(undefined);
+JSON.stringify(function(){});
+JSON.stringify(sym) 
+JSON.stringify([1,undefined,function(){},4]) //不安全的JSON值，返回null
+JSON.stringify({a:1,b:function(){}}) //忽略不安全的JSON值
+```
