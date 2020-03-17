@@ -498,13 +498,13 @@ isThisCool(["a","b","c"],function(v){
 
 ## 强制类型转化(值转化)
 1. ToString，对于普通对象来说，除非重写toString(),否则toString()(Object.prototype.toString())返回内部属性[[Class]]的值，如果对象有自己的toString()方法，字符串化时则调用该方法并返回其值。
-数组的默认toString已经重新定义过：讲所有元素使用逗号连接。toString()可以显示调用，也可以在字符串拼接时自动调用。
+数组的默认toString已经重新定义为：将所有元素使用逗号连接。toString()可以显示调用，也可以在字符串拼接时自动调用。
 ```js
 let a = [1,2,3]
 a.toString();
 let b = a+'.';
 ```
-2.安全的JSON值都可以使用JSON.stringify字符串化，不安全的JSON值(：undefined、function、symbol、对象的循环引用)自动忽略，在数组中则返回null
+2. 安全的JSON值都可以使用JSON.stringify字符串化，不安全的JSON值(：undefined、function、symbol、对象的循环引用)自动忽略，在数组中出现不安全的JSON值时则返回null
 ```js
 let sym = Symbol('y')
 JSON.stringify(42);
@@ -517,3 +517,262 @@ JSON.stringify(sym)
 JSON.stringify([1,undefined,function(){},4]) //不安全的JSON值，返回null
 JSON.stringify({a:1,b:function(){}}) //忽略不安全的JSON值
 ```
+3. 包含循环引用的对象，需要在当前对象上定义toJSON方法：返回安全的JSON值，在JSON.stringify时;否则将发生报错！
+```js
+var o = {};
+var a = {
+   b:42,
+   c:o,
+   d:function(){}
+}
+o.e = a;
+JSON.stringify(a) // 报错
+a.toJSON = function(){
+   return {b:this.b}
+}
+JSON.stringify(a) //'{"b":"42"}'
+```
+
+4. JSON.stringify函数的第二个参数：数组或者函数，如果是数组，则数组中包含允许字符串化的属性，如果是函数，函数参数是对象的key和value，用于在字符串化时筛选对象属性；
+第三个参数用于输出指定对象每一层的space。
+```js
+var a = {
+   b:42,
+   c:"42",
+   d:[1,2,3]
+}
+JSON.stringify(a,['b','c']);
+JSON.stringify(a,function(k,v){
+   if(k!=='c') return v;
+})
+JSON.stringify(a,null,3);
+```
+5. JSON.stringify()和toString()，在数字，字符串，布尔值上，表现形式一致，都是字符串化；在对象上，JSON.stringify()字符串化，toString()如1所说。
+```js
+var a = {
+   b:42,
+   c:"42",
+   d:[1,2,3]
+}
+var b = "12",
+    c = 12,
+    d = true;
+var e = [12,13,14]
+var f= null;
+var g = undefined;
+a.toString()
+JSON.stringify(a)
+b.toString()
+JSON.stringify(b)
+c.toString();
+JSON.stringify(c)
+d.toString();
+JSON.stringify(d);
+e.toString();
+JSON.stringify(e);
+// f.toString(); 报错
+JSON.stringify(f);
+// g.toString() 报错
+JSON.stringify(g);
+
+```
+
+6. ToNumber，true转化1，false转化0，undefined转化NaN，null转化0；对象（包含数组）首先按照valueOf或者toString方法向基本数据类型转化，如果能够返回基本数据类型，按照基本数据类型转化规则，否则产生TypeError错误。
+```js
+var a = {
+  valueOf:function(){
+    return "42";
+  },
+  toString:function(){
+    return "52"
+  }
+}
+var b = {
+  toString : function(){
+    return "52"
+  }
+};
+var c =  [6,2];
+c.toString = function(){
+  return this.join("")
+}
+
+Number(a)
+Number(b)
+Number(c)
+Number("")
+Number([])
+Number(['1234'])
+Number(["abc"])
+Number('0xab')
+Number('0123')
+Number('12.3')
+Number('12b')
+Number(true)
+Number(false)
+Number(undefined)
+Number(null)
+
+```
+
+7. ToBoolean,JavaScript中值可分成两类：可以被强制转换为false的值，另一类是可以被强制转换成true。常见的假值：undefined、null、false、+0，-0，NaN，""。这种假值的基本类型可以封装成对象,这种包装对象返回true。容易混淆的真值："false","0","''",[],{},function(){}。
+```js
+Boolean(undefined)
+Boolean(null)
+Boolean(false)
+Boolean(+0)
+Boolean(-0)
+Boolean(NaN)
+Boolean("")
+let a = new Boolean(false);
+let b = new Number(0);
+let c = new String(""); 
+Boolean(a&&b&&c) //true
+Boolean('false')
+Boolean('0')
+Boolean("''")
+Boolean([])
+Boolean({})
+Boolean(function(){})
+```
+
+## 显示强制类型装换
+1. JavaScript在构造函数没有参数的时候，可以省略括号,建议使用ES5提供的Date.now()获取当前时间戳；
+```js
+var a = new Date().getTime()
+var b = Date.now();
+var d = +new Date(); //将日期转成数字时间戳
+var c = +new Date;
+d === c; //true
+```
+2. ~（位操作非），~x = -(x+1), 为了避免抽象渗漏，~和indexOf()实现强制类型转换为Boolean值，也就是用-1作假值的逻辑操作时，可以通过~运算符。
+```js
+var a = "Hello World";
+~a.indexOf('lo');
+!~a.indexOf('lo');
+```
+
+3. 字位截除，~~运算符和Math.floor()用来截取数值的小数部分，~~只适用于32位数字，并且在负数的处理与Math.floor不同。在使用~~确保别人看得懂。
+```js
+Math.floor(49.6)
+~~49.6
+Math.floor(-49.6);
+~~-49.6
+1E20
+1E20 | 0 / 10;
+~~1E20 / 10;
+(1E20 | 0) / 10;
+
+```
+
+
+## 数字字符串解析与转换
+1. 解析字符串中的数字和将字符串转化为数字两者还是存在差异的；解析允许字符串中含非数字，解析从左向右，遇到非数字字符停止，parseInt方法就符合这样的描述；而转换是不允许非数字字符，否则返回NaN，Number符合这样的操作。parseInt的参数是字符串类型的，如果不是，则会先隐式转换字符串，再进行解析；为了避免出现问题，不要传入非字符串类型参数；parseInt第二个参数转换基数不传时，parseInt会根据字符串的第一个字符自行决定基数，所以在使用时，应指明第二个参数为10。
+```js
+var a = "42";
+var b = "42px";
+
+Number(a) //42
+parseInt(a) //42
+
+Number(b) //NaN
+parseInt(b) //42
+
+parseInt("33.2xx");
+parseFloat("33.2xx");
+
+parseInt(true)
+parseInt([1,2,3])
+
+parseInt('0x9'); //9
+parseInt('0o8'); 
+
+parseInt('0x9',10); //0 
+parseInt('0o8',10); //0
+
+parseInt(1/0,19); //18
+
+```
+
+
+## 显式转换为布尔值
+
+强制其他类型转换布尔类型的操作，Boolean(),更常用是运算符!!;如果在if条件中不显示的进行类型转化，if会隐式的进行类型转化，隐式的转换会影响代码的可读性，建议显示转化使用Boolean或者!!。
+```js
+var a = "0";
+var b = [];
+var c = {};
+
+var d = "";
+var e = 0;
+var f = null;
+var g;
+!!a
+!!b
+!!c
+!!d
+!!e
+!!f
+!!g
+```
+
+
+## 隐式强制类型转化
+隐式强制类型转换作用是减少冗余。
+1. 字符串和数字之间的隐式强制类转换：+运算符的重载，用于数字运算，或者字符串拼接；对于加号两边的操作数，如果其中一个操作数可以通过ToPrimitive抽象操作转换成字符串，则进行字符串拼接操作，否则执行数字加法；于是，空字符串用于字符串拼接；空字符串拼接与String()的区别在于，空字符串拼接先调用valueOf,在进行ToString()抽象操作。
+```js
+var a = 42;
+var b = "0";
+var s = "";
+var c = 42;
+var d = 0;
+
+var e = [1,2]
+var f = [3,4]
+var g = {
+   valueOf:function(){return 42;},
+   toString:function(){return 4;}
+}
+a+s //"42"
+a+b // "420"
+c+d //42
+e+f //"1,23,4"
+[] + {} //[object Object]
+{} + [] //0
+
+g+"";
+String(g)
+
+```
+
+2. 字符串隐式强制类型转数字使用-运算符,-运算法的隐式转化同+运算符。
+```js
+var a = "3.14";
+var b = a - 0;
+var c = [3];
+var d = [4];
+var e = [3,4];
+var f = [1,2];
+b
+d-c
+e-f
+````
+
+3. 布尔值隐式强制类型转数字
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
