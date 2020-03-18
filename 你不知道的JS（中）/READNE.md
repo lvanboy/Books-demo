@@ -756,9 +756,172 @@ var f = [1,2];
 b
 d-c
 e-f
-````
+```
 
 3. 布尔值隐式强制类型转数字
+```js
+function onlyOne(){
+   var sum = 0;
+   for(var i = 0;i<arguments.length;i++){
+      if(arguments[i]){
+         sum +=arguments[i]
+      }
+   }
+   return sum == 1;
+}
+var a = true;
+var b = false;
+onlyOne(b,a);
+onlyOne(b,a,b,b,b);
+onlyOne(b,b);
+onlyOne(b,a,b,b,b,a);
+```
+
+4. 隐式强制类型转布尔值，在if语句，for语句中的判断表达式，while语句中，非布尔值会隐式强制类型转换为布尔值，遵循ToBoolean的抽象操作。
+
+```js
+var a = 42;
+var b = "abc";
+var c;
+var d = undefined;
+if((a&&d) || c){
+   console.log('yep')
+}
+```
+
+5. ||和&&选择器运算符，他们的返回的结果不一定是布尔值，而是两个操作数中的一个；||运算符判断结果为true就返回第一个操作数的值，否则就返回第二个操作数的值，&&运算符判断结果为true返回第二个操作数的值，如果为false就返回；近似理解：**a||b (roughly equivalent to) a ? a: b,a&&b (roughly equivalent to) a ? b : a**;
+```js
+var a = 42;
+var b = "abc";
+var c = null;
+
+a || b;
+a && b
+c || b;
+c && b;
+```
+||常见用法：
+```js
+function fn(a,b){
+   a = a || 'hello';
+   b = b || 'world';
+   console.log(`${a} + ${b}`);
+}
+fn();
+fn("yeah","yeah")
+//es6写法
+function fn1(a='hello',b='world'){
+   console.log(`${a} + ${b}`);
+}
+fn1()
+fn1('ga','ga');
+
+```
+&&常见用法
+```js
+function foo(){
+   console.log(a)
+}
+var a = 42;
+a&&foo()
+
+```
+
+6. 符号Symbol类型，在显示转化为字符串时正常，但在隐式转换时，会报错；不能强制转换成数字，但是可以强制转换成Boolean；
+```js
+var s1 = Symbol('cool');
+String(s1);
+
+var s2 = Symbol('not cool');
+s2 + "";
+
+Number(s2)
+Boolean(s2)
+!!s2
+```
+
+
+## ==和===
+1. ==判断值是否相等，===判断值和类型是否相等；更准确说==允许在比较中进行强制类型转换，而===不允许
+
+2. 字符串和数字的比较,如果Type(x)是数字，Type(y)是字符串，则返回x == ToNumber(y)的结果；如果Type(x)是字符串，Type(y)是数字，则返回toNumber(x) == y；
+
+```js
+var x = 42;
+var y = "42";
+
+x === y;
+x == y;
+
+```
+3. 其他类型和布尔值的相等比较，如果Type(x)是布尔类型，则返回ToNumber(x) == y,如果Type(y)是布尔类型，则返回x == ToNumber(y)；
+```js
+var a = "42";
+var b = true;
+
+a == b //false
+
+var x = "42";
+var y = false;
+x == y; //false
+```
+
+4. 对于这种类型组合的规则，建议不要使用 == true 或者 ==false的条件
+
+5. null和undefined的比较，如果x为null，y为undefined，则结果为true；如果x为undefined，y为null，则结果为true，==情况下，这两者是相等的，否则都是不相等的。判断函数没有返回值，而非假值，可以使用null和undefined作为判断条件。
+```js
+var a = null;
+var b;
+
+a == b; // true;
+a == null;// true;
+b == null;// true;
+a == false;// false  
+b == false;// false 
+a == ""; //false
+b == ""; //false
+a == 0; // false
+b == 0; //false
+```
+```js
+var a = doSomething();
+if(a === null || a === undefined ){
+   //
+}
+if(a == null){
+   //等价上面的写法
+}
+```
+
+6. 对象和非对象之间的相等比较，如果Type(x)是字符串或者数字，Type(y)是对象，则返回x == ToPrimitive(y)的结果；如果Type(x)是对象，Type(y)是字符串或者数字，则返回ToPromitive(x) == y的结果。undefined，null通过Object显式的进行包装，返回一个空对象，NaN包装对象均返回一个[Number: NaN]常规对象。
+```js
+var a = 32;
+var b = [32];
+
+a == b; //true
+
+var c = "abc";
+var d = Object(c);
+c == d; //true
+c === d; //false
+
+var e = null;
+var f= Object(e);
+e == f; //false;
+
+var g = undefined;
+var h = Object(g);
+g == h; //false;
+
+var x = NaN;
+var y = Object(x);
+x == y; //false
+
+
+```
+
+
+
 
 
 
