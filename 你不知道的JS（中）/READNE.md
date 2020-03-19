@@ -920,6 +920,41 @@ x == y; //false
 
 ```
 
+7. 其他一些应该避免的问题，valueOf()被重写,并且使用==进行逻辑判断，这样会发生隐式转换；
+```js
+Number.prototype.valueOf = function(){
+   return 3;
+}
+var a = new Number(2)
+a == 3 //true;
+
+```
+
+x&&x，先执行x再执行x，存在以下情况，使得即满足x也满足x；
+```js
+var i = 2;
+Number.prototype.valueOf = function(){
+   return i++;
+}
+var a = new Number(42);
+if(a == 2 && a == 3){
+   console.log("Yep,this happened!")
+}
+
+```
+
+安全的使用==，如果两边的值中有true或者false，千万不要使用==，或者如果两边的值中有[]、""、0，尽量不要使用等号，应该使用===来避免类型转换。
+
+在关系比较中的值应该显式的进行强制类型转换后再比较。
+```js
+var a = [42];
+var b = "043";
+a < b //false;
+Number(a) < Number(b); //true;
+
+```
+
+
 
 
 
