@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元素选择器的级联语法</title>
+    <style>
+        article:not(_) {
+            color: cadetblue;
+        }
+
+        article {
+            font-size: 18px;
+            color: red;
+        }
+
+        [type="radio"].radio {
+            outline: none;
+            background-color: cadetblue;
+            width: 40px;
+            height: 40px;
+            color: cadetblue;
+        }
+
+        [type="radio"]input {
+            outline: none;
+            background-color: cadetblue;
+        }
+
+        .dargArea {
+            width: 50%;
+            min-width: 300px;
+            height: auto;
+            padding: 20px;
+            border: 1px solid cadetblue;
+        }
+
+        :hover.radio {
+            width: 30px;
+            height: 30px;
+        }
+
+        [ondragstart] {
+            cursor: move;
+        }
+
+        x-element {
+            font-size: 20px;
+            text-decoration: underline;
+            color: cadetblue;
+        }
+    </style>
+</head>
+
+<body>
+    <p>元素选择器不能重复自身来提升优先级。
+        <article>
+            但可以借助:not伪元素替身标签选择器提升自身权重
+            <pre>article:not(_){
+                color: cadetblue;    
+            }</pre>
+        </article>
+    </p>
+    <p>级联使用的时候元素选择器必须在前面，否则无效。</p>
+    <p>通配选择器*在级联时可省略，谨慎使用*</p>
+
+    <hr>
+    <h3>当前input和code可拖拽</h3>
+    <input type="radio" class="radio" draggable="true" ondragstart="dargStart(event)" id="dargTarget">
+
+    <p>级联用法：推荐将类类选择器放在属性匹配选择器的后面,类选择器也可以放在伪类后面。
+        <pre draggable="true" ondragstart="dargStart(event)" id="dargTarget01">
+            [type="radio"]input{
+                outline:none;
+                background-color:cadetblue;    
+            }  //无效
+            [type="radio"].radio{
+                width: 40px;
+                height: 40px;
+            } //有效
+            :hover.radio{
+                width:30px;
+                height:30px;
+            }
+        </pre>
+    </p>
+    <hr>
+    <div class="dargArea" ondragover="allowDrap(event)" ondrop="drop(event)">拖住到这里来吧！</div>
+    <x-element>自定义元素x-element设置样式</x-element>
+    <script>
+        var allowDrap = function (ev) {
+            ev.preventDefault();
+        }
+
+        var drop = function (ev) {
+            const data = ev.dataTransfer.getData('Text');
+            const node = document.querySelector('.dargArea');
+            const node_child = node.children;
+            for (let i = 0; i < node_child.length; i++) {
+                let id = node_child[i].id || '';
+                if (id && id == data) {
+                    return;
+                }
+            }
+            ev.target.appendChild(document.getElementById(data));
+        }
+
+        var dargStart = function (ev) {
+            ev.dataTransfer.setData('Text', ev.target.id)
+        }
+    </script>
+</body>
+
+</html>
