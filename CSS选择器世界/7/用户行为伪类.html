@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户行为伪类</title>
+    <style>
+        .hover-target::after {
+            content: "";
+
+            width: 50px;
+            height: 50px;
+            background-color: cadetblue;
+            position: absolute;
+            top: -40px;
+            left: 0;
+            transition: visibility 0s .5s;
+            visibility: hidden;
+
+        }
+
+        .hover-target {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .hover-target:hover::after {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>:hover{}</h3>
+    <p>增加hover延时效果，优化体验(display不可以设置transition，而visibility可以)</p>
+    <button>点击提交</button><br>
+    <div class="hover-target">123</div>
+    </div>
+</body>
+
+</html>

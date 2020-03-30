@@ -1,11 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>属性选择器</title>
+    <link rel="stylesheet" href="./iconfont.css">
+    <style>
+        [disabled] {
+            color: cadetblue;
+            background-color: #ccc;
+        }
+
+        /*IE7兼容写法*/
+        [defaultChecked] {}
+
+        /*checked修改样式，不会同步发生变化*/
+        [checked] {}
+
+        /*IE9不兼容的属性选择器type:email,url,range,number,tel*/
+        [type="email"] {}
+
+        /*自定义表单类型*/
+        [type="zipcode"] {}
+
+        label[for] {
+            position: relative;
+            display: inline-block;
+            vertical-align: bottom;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            cursor: pointer;
+        }
+
+        [type="radio"] {
+            display: none;
+        }
+
+        [type="radio"]:checked+label[for] {
+            border: 2px solid cadetblue;
+        }
+
+        [type="radio"]:checked+label[for]::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: cadetblue;
+        }
+
+        [attr~="val"] {
+            color: cadetblue;
+        }
+
+        [data-align~="top"] {
+            top: 0;
+        }
+
+        [data-align~="left"] {
+            left: 0;
+        }
+
+        [data-align~="bottom"] {
+            bottom: 0;
+        }
+
+        [data-align~="right"] {
+            right: 0;
+        }
+
+        [data-align] {
+            position: absolute;
+        }
+
+        [ctr|="val"] {
+            color: chocolate;
+        }
+        [attr^="val"]{
+            color:cyan;
+        }
+        [class=" "]{
+            outline: 1px solid red;
+        }
+        [href^="http"]:before{
+            content: "\e660";
+            margin-right: 10px;
+        }
+        [attr$="pack"]{
+            color:tomato;
+            font-size:14px;
+        }
+        [href$=".pdf"]{
+            font-size: 20px;
+        }
+        [href$=".zip"]{
+            color: lightblue;
+        }
+        [href$=".jpg"],
+        [href$=".png"],
+        [href$=".jpeg"],
+        [href$=".gif"]{
+            padding-left: 20px;
+            background: url("./image.svg") no-repeat   left;
+            background-size: 25px;
+        }
+
+        [attr*="good"]{
+            background: #ccc;
+        }
+        strong{
+            padding: 10px;
+        }
+        [attr^="wegame" i]{
+            color: #F07878;
+        }
+    </style>
 </head>
+
 <body>
+    <h2>属性直接匹配选择器</h2>
+    <ul>
+        <li>[attr]</li>
+        <li>[attr="val"]</li>
+        <li>[attr~="val"]</li>
+        <li>[attr|="val"]</li>
+    </ul>
+    <p>对于布尔值的表单属性，只要拥有属性就会赋予功能</p>
+    <input type="text" disabled>
+    <input type="text" disabled="">
+    <input type="text" disabled="false">
+    <input type="radio" checked name="sex" id="man"><label for="man"></label>男
+    <input type="radio" name="sex" id="woman"><label for="woman"></label>女
+    <input type="zipcode">
+    <p>[attr="val"]:省略号可以省略，属性包含空格可以转义，\0020，或者使用引号包裹</p>
+    <p>[attr~="val"]:属性值单词完全匹配选择器,应用场景：自定义属性作为命名空间</p>
+    <div attr="  val  ">attr=" val "</div>
+    <div attr="va-l"> attr="va-l"</div>
+    <div attr="value">attr="value"</div>
+    <div attr="val ue">attr="val ue"</div>
+    <div data-align="top left">1</div>
+    <div data-align="left bottom">2</div>
+    <div data-align="right top">3</div>
+    <div data-align="bottom right">4</div>
+    <p>[ctr|="val"]:起始片段完全匹配器,以val开头或者以val-开头，设计初衷：用在a元素的hreflang或者任意元素lang属性，用于多语言功能实现</p>
+    <div ctr="val">ctr="val"</div>
+    <div ctr="val-">ctr="val-"</div>
+    <div ctr="val bar">ctr="val bar"</div>
+    <div ctr="value">ctr="value"</div>
+    <div ctr="bar val">ctr="bar val"</div>
+    <div ctr="bar val-ue">ctr="bar val-ue"</div>
+    <p>由此可以推断出另一种编写css方式，AMCSS(Attribute module for css),基于属性控制的CSS样式编写</p>
+    <hr>
+    <h2>属性正则匹配选择器</h2>
+    <ul>
+        <li>[attr^="val"]</li>
+        <li>[attr$="val"]</li>
+        <li>[attr*="val"]</li>
+    </ul>
+    <p>[attr^="val"]：匹配attr属性以val开头的元素,应用场景：a元素连接地址，显示小图标</p>
+    <div attr="val"> attr="val"</div>
+    <div attr="text val"></div>
+    <div attr="value">attr="value"</div>
+    <div attr="val-ue">attr="val-ue"</div>
+    <div attr="va-l-ue">attr="va-l-ue"</div>
+    <a href="http://www.baidu.com" class="iconfont">连接</a>
     
+
+    <p>[attr$="pack"]:attr属性值以val结尾的元素,应用场景：判断a元素连接的文件类型</p>
+    <div attr=" pack">attr="pack"</div>
+    <div attr="webpack"> attr="webpack"</div>
+    <div attr=" webpack cc ">attr="webpack cc"</div>
+    <div attr="webpack-cc">attr="webpack-cc"</div>
+    <a href="xxx.pdf">pdf文件</a>
+    <a href="xxxxx.zip">压缩文件</a>
+    <a href=".jpg">图片文件</a>
+
+    <p>[attr=*="good"]:attr属性包含字符good的元素</p>
+    <div attr="your good boy"> attr="your good boy"</div>
+    <div attr="xgoodm">attr="xgoodm"</div>
+    <div attr="good-bye">attr="goodbye"</div>
+    <div attr="xgood">attr="xgood"</div>
+    <strong>通过[attr^="wegame" i|I]{}添加i的形式忽略属性值的大小写</strong>
+    <div attr="WEGAME">attr="WEGAME"</div>
+    <div attr="WEGAMe-1">attr="WEGAMe-1"</div>
+    <hr>
+    <h2>利用属性选择器过滤筛选</h2>
+    <input type="search" placeholder="输入城市名词或者拼音">
+    <ul>
+        <li data-search="重庆市 chongqing">重庆市</li>
+        <li data-search="南京市 nanjing">南京市</li>
+        <li data-search="武汉市 wuhan">武汉市</li>
+        <li data-search="上海市 shanghai">上海市</li>
+        <li data-search="北京市 beijing">北京市</li>
+        <li data-search="广东市 guangdong">广东市</li>
+
+    </ul>
+    <script>
+        var eleStyle = document.createElement('style')
+        document.head.appendChild(eleStyle);
+        var inputFilter = document.querySelector('[type="search"]');
+        inputFilter.addEventListener('input',function(){
+            var val = this.value.trim();
+            eleStyle.innerHTML =!!val ? `[data-search]:not([data-search*="${val}" i]){display:none}`:"";
+        })
+
+    </script>
 </body>
+
 </html>
