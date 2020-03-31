@@ -955,6 +955,58 @@ Number(a) < Number(b); //true;
 ```
 
 
+## 标签语句
+```js
+{
+   a:foo()
+}
+
+```
+
+continue和break语句可以带一个标签，实现标签跳转的功能
+```js
+foo:for(let i = 0;i< 4;i++){
+   for(let j = 0;j< 4;j++){
+      if(j == i){
+         continue foo;
+      }
+      if(j*i % 2 == 1){
+         continue;
+      }
+      console.log(i,j)
+   }
+}
+
+foo:for(let i = 0;i<4;i++){
+   for(let j = 0;j<4;j++){
+      if(i*j>=3){
+         break foo;
+      }
+      console.log(i,j)
+   }
+}
+
+
+```
+
+标签代码块
+```js
+function foo(){
+   bar:{
+      console.log('hello');
+      break bar;
+      console.log('never foo');
+   }
+   console.log('world')
+}
+
+```
+
+标签是不能用引号包裹的
+
+
+
+
 
 
 
