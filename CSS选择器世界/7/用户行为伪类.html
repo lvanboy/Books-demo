@@ -29,6 +29,108 @@
         .hover-target:hover::after {
             visibility: visible;
         }
+
+        form {
+            border: 1px solid;
+            color: gray;
+            padding: 4px;
+        }
+
+        form:focus-within {
+            background: #ff8;
+            color: black;
+        }
+
+        input {
+            margin: 4px;
+        }
+
+        .active~div:active {
+            background: skyblue;
+        }
+
+        .active~x-ele {
+            cursor: pointer;
+        }
+
+        .active~x-ele:active {
+            background: teal;
+            user-select: none;
+
+        }
+
+        [attr="bubble"]:active {
+            background: teal;
+        }
+
+        [attr="bubble"] button:active {
+            outline: 10px solid #ccc;
+        }
+
+        [href]:active,
+        button:active {
+            box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .05);
+        }
+
+        [href]:active,
+        button:active,
+        [type=reset]:active,
+        [type=button]:active,
+        [type=submit]:active {
+            outline: none;
+            background: linear-gradient(rgba(0, 0, 0, .05), rgba(0, 0, 0, .05));
+        }
+
+        [href] img:active {
+            outline: 999px solid rgba(0, 0, 0, .05);
+            outline-offset: -999px;
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%，0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%，0 100%);
+        }
+
+        [attr="btn-post1"]:active {
+            margin-right: 10px;
+        }
+
+        [attr="btn-post1"]:active::after {
+            content: url(./1.jpg?action=click&attr=btn-post1);
+            display: none;
+        }
+
+        [attr="btn-post2"]:active::after {
+            content: url(./1.jpg?action=click&attr=btn-post2);
+            display: none;
+        }
+
+        textarea {
+            border: 1px solid #ccc;
+        }
+
+        textarea:focus {
+            border-color: HighLight;
+            outline: none;
+        }
+
+        [ attr="tofocus"] {
+            display: none;
+            user-select: none;
+
+        }
+        [focus]{
+            outline: 1px dotted HighLight;
+            outline: 5px auto -webkit-focus-ring-color;
+        }
+
+
+        .container {
+            display: inline-block;
+            outline: 0 none;
+        }
+
+        :focus>[ attr="tofocus"] {
+            display: inline;
+            outline: none;
+        }
     </style>
 </head>
 
@@ -37,6 +139,59 @@
     <p>增加hover延时效果，优化体验(display不可以设置transition，而visibility可以)</p>
     <button>点击提交</button><br>
     <div class="hover-target">123</div>
+    <hr>
+    <h3>:focus-within</h3>
+    <p>试试在这个表单中输入点什么。(在鼠标没有连接，可以使用键盘tab)</p>
+
+    <form>
+        <label for="given_name">Given Name:</label>
+        <input id="given_name" type="text">
+        <br>
+        <label for="family_name">Family Name:</label>
+        <input id="family_name" type="text">
+    </form>
+    <hr>
+    <h3 class="active">:active,点击按下出发active，抬起取消active</h3>
+    <p>适用任何html元素</p>
+    <div>div盒子</div>
+    <span>span标签</span>
+    <x-ele>自定义元素</x-ele>
+    <dl>
+        <dt>:active存在的问题</dt>
+        <dd>IE下，:active样式的应用无法冒泡</dd>
+        <dd>IE下：html、body应用:active样式后，无法还原</dd>
+        <dd>Safari浏览器，:active无效，需设置任意的touch事件(a元素：focus状态+enter=点击事件)，更好的体验是使用原生的-webkit-tap-highlight-color{}</dd>
+    </dl>
+    <p attr="bubble"><button>点击触发冒泡事件，同时更新父级设置的伪类active事件</button></p>
+    <h3>:active主要用于点击反馈，给予用户点击反馈提示，对于按钮和连接必不可少，不适合复杂交互,移动端需要更多的点击反馈</h3>
+    <hr>
+    <h3>移动端通用按钮:active点击样式</h3>
+    <p>
+        [href]:active,
+        button:active
+        {
+        box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .05);
+        }
+    </p>
+    <p>图片点击反馈::active使用移动端，使用于图片元素</p>
+    <a href="#"><img src="1.jpg"></a>
+    <hr>
+    <h3>css埋点数据上报</h3>
+    <p>点击按钮查看网络请求</p>
+    <button attr="btn-post1">按钮1：</button><button attr="btn-post2">按钮2：</button>
+    <hr>
+    <h3>焦点伪类:focus</h3>
+    <p>匹配聚焦状态的元素,默认只能匹配特定元素，包括：非disabled表单元素，包含href属性的a元素，area元素，一个页面最多只能有一个触发焦点的元素</p>
+    <p>如何使普通元素响应focus伪类？</p>
+    <ul>
+        <li>设置contenteditable</li>
+        <li>设置tabindex</li>
+    </ul>
+    <textarea></textarea>
+    <div class="container" tabindex="-1">
+        <div tabindex="0">点击我，给你看好东西！<img attr="tofocus" src="./2.jpg" alt="2"></div>
+    </div>
+    <p focus>模拟浏览器原生focus轮廓</p>
     </div>
 </body>
 
