@@ -116,7 +116,8 @@
             user-select: none;
 
         }
-        [focus]{
+
+        [focus] {
             outline: 1px dotted HighLight;
             outline: 5px auto -webkit-focus-ring-color;
         }
@@ -130,6 +131,65 @@
         :focus>[ attr="tofocus"] {
             display: inline;
             outline: none;
+        }
+
+        [type="submit"] {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            user-select: none;
+        }
+
+        [for="submit"] {
+            background: #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #f0f0f0;
+        }
+
+        :focus+[for="submit"] {
+            outline: 1px dotted HighLight;
+            outline: 5px auto -webkit-focus-ring-color;
+        }
+
+        [type="checkbox"] {
+            position: absolute;
+            clip: rect(0 0 0 0);
+        }
+
+        [for="checkbox"] {
+            border: 1px solid gray;
+        }
+
+        :focus+[for="checkbox"] {
+            border-color: skyblue;
+        }
+
+        .cs-normal:focus-within .cs-label {
+            color: darkturquoise;
+            text-shadow: 0 0 1px;
+        }
+
+        .cs-datalist {
+            display: none;
+            position: absolute;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+
+        .cs-details:focus-within .cs-datalist {
+            display: block;
+        }
+
+        p {
+            line-height: 2;
+        }
+
+        [attr="btn-with-bg"] {
+            background-color: dimgray;
+        }
+
+        :focus:not(:focus-visible) {
+            outline: 0;
         }
     </style>
 </head>
@@ -188,10 +248,42 @@
         <li>设置tabindex</li>
     </ul>
     <textarea></textarea>
-    <div class="container" tabindex="-1">
+    <div class="container">
         <div tabindex="0">点击我，给你看好东西！<img attr="tofocus" src="./2.jpg" alt="2"></div>
     </div>
-    <p focus>模拟浏览器原生focus轮廓</p>
+    <p focus>
+        模拟浏览器原生focus轮廓,不要使用div,span模拟按钮的原因：button元素本身可触发提交表单行为，原生支持enter，可以被键盘focus，而div和span元素不具备，如果存在button兼容性的问题，使用label的for属性关联按钮
+    </p>
+    <input type="submit" id="submit"><label class="btn" for="submit">提交</label>
+    <input type="checkbox" id="checkbox"><label for="checkbox">提交</label>
+    </div>
+    <p>:focus-within伪类当前元素或者当前元素的子元素处于聚焦状态都会匹配，即子元素聚焦，可以触发父级元素样式发生变化，是借助用户行为触发的，属于后渲染，不会与现有机制存在冲突</p>
+    <div class="cs-normal">
+        <label class="cs-label">用户名：</label><input type="text" class="cs-input">
+    </div>
+    <div class="cs-details">
+        <a href="javascript:;" class="cs-summary">我的消息</a>
+        <div class="cs-datalist">
+            <a href>我的回答</a>
+            <a href>我的私信</a>
+            <a href>未评价订单</a>
+            <a href>我的关注</a>
+        </div>
+    </div>
+    <hr>
+    <p>:focus-visible使用键盘访问时触发，这样可以解决鼠标访问无outline，键盘访问有outline，以下情况存在鼠标访问有outline情况</p>
+    <ul>
+        <li>设置背景的button</li>
+        <li>h5中的summary元素</li>
+        <li>设置h5 tabindex属性的元素</li>
+    </ul>
+    <div class="q-list">
+        <button attr="btn-with-bg">点击出现outline</button>
+        <details>
+            <summary>Details</summary>
+            open content is here
+        </details>
+        <div tabindex="0">设置了tabindex=0的可focus元素</div>
     </div>
 </body>
 

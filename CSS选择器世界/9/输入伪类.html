@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>输入伪类</title>
+    <style>
+        /*IE9支持*/
+        :disabled {
+            border: 1px solid lightgreen;
+            background: #f0f0f3;
+        }
+
+        :enabled {
+            border: 1px solid deepskyblue;
+            background: lightskyblue;
+        }
+
+        /*IE8支持*/
+        [disabled] {
+            border: 1px solid lightgreen;
+            background: #f0f0f3;
+        }
+
+        .cs-button:disabled {
+            border: 1px solid #f0f0f3;
+
+        }
+
+        textarea {
+            border: 1px solid gray;
+            color: #fff;
+        }
+
+        textarea:read-write {
+            border: 1px solid black;
+            background: gray;
+        }
+
+        textarea:read-only {
+            border: 1px solid gray;
+            background: lightgray;
+        }
+
+        input[placeholder] {
+            border: 2px solid gray;
+        }
+
+        input[placeholder]:placeholder-shown {
+            border: 2px solid black;
+        }
+
+        .input-fill:placeholder-shown::placeholder {
+            color: transparent;
+            height: 30px;
+        }
+
+        .input-fill-x {
+            position: relative;
+            background-color: #fff;
+        }
+
+        .input-fill {
+            background-color: #fff;
+            height: 40px;
+            padding: 10px;
+        }
+
+        .input-label {
+            position: absolute;
+            left: 16px;
+            top: 14px;
+            pointer-events: none;
+        }
+
+        .input-fill:not(:placeholder-shown)~.input-label,
+        .input-fill:focus~.input-label {
+            transform: scale(0.75) translate(0, -16px);
+        }
+
+        textarea:placeholder-shown+small::before,
+        input:placeholder-shown+small::before {
+            content: "尚未输入内容";
+            color: royalblue;
+            font-size: 87.5%;
+        }
+
+        option:default {
+            color: red;
+        }
+
+        input[type="radio"]:default {
+            transform: scale(1.5);
+        }
+
+        input:default+label::after {
+            content: "(推荐)";
+        }
+
+        h2~input:checked {
+            box-shadow: 0 0 2px red;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>:enabled和:disabled</h3>
+    <input type="text" disabled value="禁用">
+    <input readonly value="指读">
+    <input type="text" value="普通">
+    <p>实际应用：借助:enabled伪类区分IE8和IE9，:enabled在js中发挥重要作用</p>
+    <code>
+        document.querySelectorAll('form :enabled') //查询所有可用表单，实现表单序列化的方法
+    </code>
+    <button class="cs-button">删除(按钮禁用后，避免ajax过度请求)</button>
+    <hr>
+    <h3>:read-only,:read-write</h3>
+    <p>匹配输入框是否可读，匹配输入框是否可写，用于移动端，或者内部项目或者实验项目</p>
+    <textarea>默认</textarea>
+    <textarea readonly>只读</textarea>
+    <textarea disabled>禁用</textarea>
+    <p>read-only和disabled区别：read-only不能编辑但是可以提交，disabled则不能编辑也不能提交。</p>
+    <h3>:placeholder-shown 占位符显示伪类</h3>
+    <p>当输入框placeholder显示时匹配该伪类</p>
+    <input type="text" placeholder="输入任意内容">
+    <p>material design风格输入框实现</p>
+    <div class="input-fill-x">
+        <input class="input-fill" type="text" placeholder="邮箱"><label class="input-label">邮箱</label>
+    </div>
+    <p>:placeholder-shown与空值判断</p>
+    <input type="text" placeholder=" "><small></small>
+    <textarea placeholder=" "></textarea><small></small>
+    <hr>
+    <h3>默认选项伪类:default</h3>
+    <p>default伪类只能作用在表单元素上，表示处于默认状态的表单元素,设计意义：当用户在选择其他数据时，依然知道默认选项是什么.表单必须基本默认表示selected checked</p>
+    <select>
+        <option>选项1</option>
+        <option>选项2</option>
+        <option selected>选项3</option>
+        <option>选项4</option>
+        <option>选项5</option>
+    </select>
+    <input type="radio" name="city" value="0">
+    <input type="radio" name="city" value="1" checked>
+    <input type="radio" name="city" value="2">
+    <input type="checkbox" value="1">
+    <input type="checkbox" value="2">
+    <input type="checkbox" value="3" checked>
+    <p>实际应用：推荐标记</p>
+    <p><input type="radio" name="pay" id="pay0"><label for="pay0">支付宝</label></p>
+    <p><input type="radio" name="pay" id="pay1" checked><label for="pay1">微信</label></p>
+    <p><input type="radio" name="pay" id="pay2"><label for="pay2">银行卡</label></p>
+    <hr>
+    <h2>输入值状态</h3>
+        <h3>选中选项伪类:checked</h3>
+        <input type="checkbox">
+        <input type="checkbox" checked>
+        <p>为何不直接使用[checked]选择器？</p>
+        <ul>
+            <li>:checked只能匹配表单元素,而checked属性任意元素可设置</li>
+            <li>js根据checked属性进行设置，标签中的checked属性并不会更新</li>
+            <li>导致[checked]属性选择器失效,伪类可以正确继承如fieldset祖先标签的状态</li>
+        </ul>
+</body>
+
+</html>

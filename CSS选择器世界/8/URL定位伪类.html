@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL定位伪类</title>
+    <style>
+        [href]{
+            color: skyblue;
+        }
+        a:not([href]){
+            color: slateblue;
+        }
+        [attr="href"]:visited::after{
+            content: 'visited';
+        }
+        [attr="href"]{
+            color: #333;
+        }
+        [attr="href"]:visited{
+            color:rgba(255, 0, 0, .3);
+            background: darkseagreen;
+        }
+        :any-link{
+            color: #fff;
+            background-color: deepskyblue;
+        }
+        :any-link:hover{
+            background: dodgerblue;
+        }
+        body{
+            height: 150vh;
+        }
+        :target{
+            color: forestgreen;
+            font-size: 20px;
+        }
+        .cs-more-p,[data-open="false"]{
+            display: none;
+        }
+        :target ~ [data-open="true"]{
+            display: none;
+        }
+        :target ~ .cs-more-p,
+        :target ~ [data-open="false"]{
+            display: inline-block;
+        }
+        .collapse{
+            width: 300px;
+        }
+        .cs-more-p{
+            margin: 0;
+        }
+        .cs-tab-li{
+            display: inline-block;
+            padding: 5px 10px;
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .cs-panel-li{
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .cs-tab-anchor-2:not(:target) + :not(:target) ~ .cs-tab .cs-tab-li:first-child,
+        .cs-tab-anchor-2:target ~ .cs-tab .cs-tab-li:nth-of-type(2),
+        .cs-tab-anchor-3:target ~ .cs-tab .cs-tab-li:nth-of-type(3){
+            background: deepskyblue;
+            color: #fff;
+        }
+        .cs-tab-anchor-2:not(:target) + :not(:target) ~ .cs-panel .cs-panel-li:first-child,
+        .cs-tab-anchor-2:target ~ .cs-panel .cs-panel-li:nth-of-type(2),
+        .cs-tab-anchor-3:target ~ .cs-panel .cs-panel-li:nth-of-type(3){
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <p>通过移除href属性来表示禁用，:link伪类弊端大于利，容易导致代码混乱，还需要注意使用顺序，通过href属性匹配可访问的a元素更好</p>
+    <a href>连接</a>
+    <a name = "example">非连接</a>
+    <p>:visited匹配元素以及其子元素支持的样式有限：主要包括border-color,color,background-color,outline-color，且不支持半透明,不支持伪类,只能重置css样式属性，不能凭空设置,无法获取:visited元素色值，能获取a元素的默认值</p>
+    <a href="#" attr="href">点击访问</a>
+    <h3>:any-link</h3>
+    <p>匹配所有设置了href属性的连接元素，包括a,link,area，匹配所有被:link和:visited匹配的元素,因为在实际项目中很少使用area，link默认是隐藏的，所以可以直接使用:any-link</p>
+    <a href="#1">没有访问过的连接</a>
+    <a href>访问过的连接</a>
+    <a >没有设置href的a元素</a>
+    <h3>目标伪类:target</h3>
+    <p>URL锚点与id匹配元素进行锚定，触发浏览器默认行为滚动定位，同时进行:target伪类匹配,如果存在多个相同id，只匹配第一个，所以不要重复定义相同id，这不兼容，也不符合语义</p>
+    <a href="#goodjob">锚点跳转</a>
+    <div id="goodjob">快到我这里来</div>
+    <h4>:target交互布局</h4>
+    <p>展开折叠效果</p>
+    <div class="collapse">
+        文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容文章内容
+        <div id="aritcleMore" hidden></div>
+        <a href="#aritcleMore" class="cs-btn" data-open="true">阅读更多</a>
+        <p class="cs-more-p">更多的文章内容,更多的文章内容,更多的文章内容,更多的文章内容,更多的文章内容,</p>
+        <a href="##" class="cs-btn" data-open="false">收齐</a>
+    </div>
+    <p>tab切换</p>
+    <div class="cs-tab-x">
+        <i id="tabPanel2" hidden class="cs-tab-anchor-2"></i>
+        <i id="tabPanel3" hidden class="cs-tab-anchor-3"></i>
+        <div class="cs-tab">
+            <a href="#tabPanel1" class="cs-tab-li">选项卡1</a>
+            <a href="#tabPanel2" class="cs-tab-li">选项卡2</a>
+            <a href="#tabPanel3" class="cs-tab-li">选项卡3</a>
+        </div>
+        <div class="cs-panel">
+            <div class="cs-panel-li">面板内容1</div>
+            <div class="cs-panel-li">面板内容2</div>
+            <div class="cs-panel-li">面板内容3</div>
+        </div>
+    </div>
+    <p>:target-within与:focus-within类似，目前浏览器兼容性存在问题</p>
+</body>
+</html>
