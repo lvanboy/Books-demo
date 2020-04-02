@@ -101,6 +101,126 @@
         h2~input:checked {
             box-shadow: 0 0 2px red;
         }
+
+        [data-open] {
+            border: 1px solid darkcyan;
+            padding: 5px 10px;
+        }
+
+        [attr="checkbox"] {
+            display: none;
+        }
+
+        .cs-more-p {
+            margin: 0;
+        }
+
+        .cs-more-p,
+        [data-open=false] {
+            display: none;
+        }
+
+        [attr="checkbox"]:checked~.cs-more-p,
+        [attr="checkbox"]:checked~[data-open='false'] {
+            display: inline-block;
+        }
+
+        [attr="checkbox"]:checked~[data-open='true'] {
+            display: none;
+        }
+        [attr="checkbox toggle"]{
+            width: 400px;
+        }
+        [attr="radio"]{
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .cs-radio{
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            border:1px solid darkgoldenrod;
+            padding: 5px;
+            vertical-align: bottom;
+            position: relative;
+            cursor: pointer;
+        }
+        :not(:focus) + .cs-radio::after{
+            content: "";
+            display: none;
+        }
+        :checked + .cs-radio::after{
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 7px;
+            width: 15px;
+            height: 7px;
+            border: 4px solid lightgreen;
+            border-left: none;
+            border-bottom: none;
+            transform: rotate(135deg);
+        }
+        label{
+            user-select: none;
+        }
+        [attr="checkbox"]{
+            cursor: pointer;
+            position: relative;
+            display: none;
+        }
+        [for="switch"]{
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: darkgray;
+            cursor: pointer;
+        }
+        [for="switch"]::after{
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            transition: all .3s;
+        }
+        [attr="checkbox"]:active:not(:disabled) + [for="switch"]{
+            background: darkgreen;
+        }
+        [attr="checkbox"]:active:not(:disabled) ~ [for="switch"]::after{
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 55px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            transition: all .3s;
+        }
+        [attr="checkbox"]:checked:not(:disabled) + [for="switch"]{
+            background: lightgreen;
+        }
+        [attr="checkbox"]:checked:not(:disabled) ~ [for="switch"]::after{
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 55px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            transition: all .3s;
+        }
     </style>
 </head>
 
@@ -152,16 +272,38 @@
     <p><input type="radio" name="pay" id="pay1" checked><label for="pay1">微信</label></p>
     <p><input type="radio" name="pay" id="pay2"><label for="pay2">银行卡</label></p>
     <hr>
-    <h2>输入值状态</h3>
-        <h3>选中选项伪类:checked</h3>
-        <input type="checkbox">
-        <input type="checkbox" checked>
-        <p>为何不直接使用[checked]选择器？</p>
-        <ul>
-            <li>:checked只能匹配表单元素,而checked属性任意元素可设置</li>
-            <li>js根据checked属性进行设置，标签中的checked属性并不会更新</li>
-            <li>导致[checked]属性选择器失效,伪类可以正确继承如fieldset祖先标签的状态</li>
-        </ul>
+    <h2>输入值状态</h2>
+    <h3>选中选项伪类:checked</h3>
+    <input type="checkbox">
+    <input type="checkbox" checked>
+    <p>为何不直接使用[checked]选择器？</p>
+    <ul>
+        <li>:checked只能匹配表单元素,而checked属性任意元素可设置</li>
+        <li>js根据checked属性进行设置，标签中的checked属性并不会更新</li>
+        <li>导致[checked]属性选择器失效,伪类可以正确继承如fieldset祖先标签的状态</li>
+    </ul>
+    <h3>单复选框显隐技术(显示更多，tab功能主要是伪类:checked和:target区别)</h3>
+    <div attr="checkbox toggle">
+        文章内容，文章内容，文章内容，文章内容，文章内容，文章内容，文章内容，文章内容，文章内容，文章内容，
+        <input type="checkbox" id="articleMore" attr="checkbox">
+        <label for="articleMore" data-open="true" class="cs-btn">阅读更多</label>
+        <p class="cs-more-p">更多的文章内容</p>
+        <label for="articleMore" data-open="false" class="cs-btn">收起</label>
+    </div>
+    <p>对于展开和收起效果最佳方式使用details和summary，单复选框显隐只能算不符合语义的奇技淫巧</p>
+    <p>对于tab切换，可以使用CSS:target兜底+JS的方式实现</p>
+    <p>单复选框显隐技术主要用于自定义单复选框、开关效果、图片、或者列表选择符，共性是：点击的交互元素是需要选择的对象，有三种实现策略：</p>
+    <ul>
+        <li>与label关联</li>
+        <li>覆盖在目标元素上</li>
+        <li>同时使用上述方法</li>
+    </ul>
+    <input type="radio" id="radio" attr="radio">
+    <label for="radio" class="cs-radio"></label>
+    <label for="radio" >单选项</label>    
+    <p>开关效果</p>
+    <input type="checkbox" id="switch" attr="checkbox">
+    <label for="switch"></label>
 </body>
 
 </html>
