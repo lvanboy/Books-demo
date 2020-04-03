@@ -336,35 +336,61 @@
             content: "您尚未选择任何选项";
             color: red;
             font-size: 87.5%;
-        } 
+        }
 
         /* :not(:checked)~.cs-valid-tips::before {
             content: "您尚未选择任何选项";
             color: red;
             font-size: 87.5%;
         } */
-        [attr="pattern"]:valid{
+        [attr="pattern"]:valid {
             background-color: green;
             color: #fff;
         }
-        [attr="pattern"]:invalid{
+
+        [attr="pattern"]:invalid {
             border: 2px solid red;
         }
-        .cs-input{
+
+        .cs-input {
             border: 1px solid gray;
             background-color: #fff;
             outline: none;
         }
-        .valid .cs-input:valid + .cs-valid-tips::before{
-            content:"✔";
-            color:green;
+
+        .valid .cs-input:valid+.cs-valid-tips::before {
+            content: "✔";
+            color: green;
         }
-        .valid .cs-input:invalid + .cs-valid-tips::before{
-            content:"不符合要求";
+
+        .valid .cs-input:invalid+.cs-valid-tips::before {
+            content: "不符合要求";
             color: red;
         }
-        .valid .cs-input:placeholder-shown + .cs-valid-tips::before{
-            content:"尚未输入值"
+
+        .valid .cs-input:placeholder-shown+.cs-valid-tips::before {
+            content: "尚未输入值"
+        }
+
+        form:invalid {
+            outline: 1px solid red;
+        }
+
+        input:in-range {
+            outline: 2px dashed green;
+
+        }
+
+        input:out-of-range {
+            outline: 2px solid red;
+        }
+
+        :required {
+            box-shadow: 0 0 0 2px green;
+        }
+
+        :optional {
+            box-shadow: 0 0 0 2px #ccc;
         }
     </style>
 </head>
@@ -575,6 +601,7 @@
         <hr>
     </div>
     <h2>输入值验证</h2>
+    <p>:valid & :invalid 在input pattern匹配表单输入时，判断是否输入值合法，从而触发这两个伪类</p>
     <div>
         验证码：<input required pattern="\w{4,6}" attr="pattern">
     </div>
@@ -586,6 +613,19 @@
         <input type="submit" value="提交">
         <p>通过form元素checkValidity()方法验证是否表单全部通过验证</p>
     </form>
+    <p>:in-range&:out-of-range,与number和range类型输入框的min和max值有关</p>
+    <input type="range" min="1" max="100">
+    <input type="number" min="1" max="100">
+    <p>可选伪类：:required&:optional,：required匹配设置required属性的表单元素，:optional则是没有设置required属性则匹配</p>
+    <input type="text" required>
+    <select required>
+        <option value="">请选择</option>
+        <option value="1">选项1</option>
+        <option value="2">选项2</option>
+    </select>
+    <input type="radio" required>
+    <input type="checkbox" required>
+    <p><b>实际应用</b></p>
     <script>
         document.addEventListener('click', function (event) {
             var target = event.target;
@@ -618,9 +658,9 @@
             }
         });
 
-        csForm.addEventListener('submit',function(event){
+        csForm.addEventListener('submit', function (event) {
             this.classList.add('valid');
-            if(this.checkValidity&&this.checkValidity() == true){
+            if (this.checkValidity && this.checkValidity() == true) {
                 console.log('表单验证通过')
             }
             event.preventDefault();
