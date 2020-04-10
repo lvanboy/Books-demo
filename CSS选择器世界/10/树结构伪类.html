@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>树结构伪类</title>
+    <style>
+        /* :root{
+            overflow-y: scroll;
+        } */
+        /* html {
+            overflow-y: scroll;
+        } */
+
+
+        :root {
+            overflow-x: hidden;
+            --blue: lightblue;
+        }
+
+        :root body {
+            width: 100vw;
+        }
+
+        .container {
+            width: 1280px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            border: 1px solid var(--blue);
+        }
+
+        .conheight {
+            height: 2000px;
+        }
+
+        .cs-empty:empty {
+            width: 120px;
+            height: 120px;
+            border: 10px dashed;
+        }
+
+        textarea:empty {
+            border: 6px dashed;
+        }
+
+        textarea:not(:empty)+span::before {
+            content: "✔";
+            color: green;
+        }
+
+        input:empty,
+        hr:empty {
+            border: 6px dashed;
+        }
+
+        .comment:empty {
+            border: 6px dashed darkcyan;
+        }
+
+        .mt {
+            margin-top: 15px;
+        }
+
+        .blank:empty {
+            border: 6px dashed firebrick;
+            margin-top: 15px;
+        }
+
+        .cs-empty:empty {
+            border: 6px dashed chocolate;
+        }
+
+        .cs-other::before {
+            content: "伪类的文字填充";
+        }
+
+        .cs-other:empty {
+            border: 6px dashed darksalmon;
+        }
+
+        dt {
+            float: left;
+        }
+
+        dd:empty::before {
+            content: "暂无";
+            color: gray;
+
+        }
+
+        tr {
+            text-align: center;
+        }
+
+        td:empty::before {
+            content: "-";
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>:root伪类</h3>
+        <p>它相当于匹配xml格式文档的根元素，html只是其中的一种，shadow DOM中是无效的，此场景使用伪类:host</p>
+        <b>:root伪类应用场景</b>
+        <p>交互触发高度超过一屏，出现滚动条，导致居中内容发现跳动偏移</p>
+        <button onclick="upHeight()">增加高度</button>
+        <p>书写css变量</p>
+        <hr>
+        <h3>:empty</h3>
+        <p>:empty伪类用来匹配空标签元素</p>
+        <ul>
+            <li>如果元素内注释，是否可以匹配:empty伪类?✔</li>
+            <li>如果元素内存在空格或者换行，是否可以匹配:empty伪类?✖</li>
+            <li>如果对称标签没有闭合，浏览器自动补齐标签会存在换行和空格，导致:empty伪类没有匹配</li>
+            <li>如果标签内存在伪元素，是否匹配:empty伪类?✔</li>
+        </ul>
+        <div class="cs-empty"></div>
+        <input type="text" class="mt">
+        <div class="comment mt">
+            <!--注释-->
+        </div>
+        <div class="blank enter"> </div>
+        <p class="cs-empty">
+            <p class="cs-other"></p>
+            <h3>:empty伪类的高频使用场景</h3>
+            <ul>
+                <li>隐藏空元素，模块内容是动态填充的，有内容时布局显示很好，但是模块内容为空时，效果就不好,通过伪类:empty将空元素隐藏</li>
+                <li>表单字段缺失智能提示</li>
+            </ul>
+            <dl>
+                <dt>姓名:</dt>
+                <dd>张三</dd>
+                <dt>性别:</dt>
+                <dd></dd>
+                <dt>手机:</dt>
+                <dd></dd>
+                <dt>邮箱:</dt>
+                <dd></dd>
+            </dl>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                    </tr>
+                    <tr>
+                        <td>lvanboy</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="file" attr="fileUpload" onchange="uploadFile(event)">
+    </div>
+    <script>
+        window.onload = function () {
+            function upHeight() {
+                let body = document.querySelector('body');
+                body.classList.add('conheight')
+            }
+            function uploadFile(e) {
+                var file = e.target.files[0];
+                console.log(file)
+
+                const reader = new FileReader();
+                const text = reader.readAsText(file);
+                reader.onload = (e) => {
+                    console.log(reader.result, e.target.result)
+                }
+
+
+
+
+            }
+            this.upHeight = upHeight;
+            this.uploadFile = uploadFile;
+
+
+
+        }
+    </script>
+</body>
+
+</html>
