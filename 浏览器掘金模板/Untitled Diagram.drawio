@@ -1,1 +1,37 @@
-<mxfile host="app.diagrams.net" modified="2021-04-01T07:06:31.422Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" version="14.2.9" etag="DCKr6rtw2_ZH8JvbUnFp" type="github"><diagram id="wEUVRR-pZXd8w3AIyGjV">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2021-04-01T07:32:08.755Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="7-XBkk_RaHfJYqiV6pHB" version="14.2.9" type="github">
+  <diagram id="wEUVRR-pZXd8w3AIyGjV" name="Page-1">
+    <mxGraphModel dx="1422" dy="706" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WVW8FzHVN7HmJiqUM2Ls-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-1" value="选择吸附面&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="110" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WVW8FzHVN7HmJiqUM2Ls-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-4" value="1.计算当前DIY造型的boundingBox" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="210" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WVW8FzHVN7HmJiqUM2Ls-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-6" value="2.获取当前pick的surface，并保证surface是平面，否则给出提示，不执行后续逻辑" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="300" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WVW8FzHVN7HmJiqUM2Ls-8" value="3.计算出与当前pick面平行的且在bounding最大值处的面作为吸附面" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="255" y="410" width="185" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
